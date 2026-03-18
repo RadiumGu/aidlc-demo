@@ -3,6 +3,7 @@ package com.awsome.shop.gateway.infrastructure.config;
 import com.awsome.shop.gateway.common.constants.RouteConstants;
 import com.awsome.shop.gateway.common.dto.ErrorResponse;
 import com.awsome.shop.gateway.common.exception.AuthenticationException;
+import com.awsome.shop.gateway.common.exception.AuthorizationException;
 import com.awsome.shop.gateway.common.exception.GatewayException;
 import com.awsome.shop.gateway.common.exception.ServiceUnavailableException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -48,6 +49,10 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             status = HttpStatus.UNAUTHORIZED;
             code = authEx.getErrorCode();
             message = authEx.getErrorMessage();
+        } else if (ex instanceof AuthorizationException authzEx) {
+            status = HttpStatus.FORBIDDEN;
+            code = authzEx.getErrorCode();
+            message = authzEx.getErrorMessage();
         } else if (ex instanceof ServiceUnavailableException svcEx) {
             status = HttpStatus.SERVICE_UNAVAILABLE;
             code = svcEx.getErrorCode();

@@ -203,4 +203,18 @@
         <logger name="com.baomidou" level="WARN"/>
         <logger name="com.amazonaws" level="WARN"/>
     </springProfile>
+    <!-- Docker 环境配置 -->
+    <springProfile name="docker">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%t] %-40.40logger{39} : %m%n%wEx</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="com.awsome" level="DEBUG"/>
+        <logger name="org.springframework" level="WARN"/>
+    </springProfile>
 </configuration>

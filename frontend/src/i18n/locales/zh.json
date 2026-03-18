@@ -29,8 +29,8 @@
   "employee": {
     "nav": {
       "home": "首页",
-      "orders": "兑换记录",
-      "points": "积分中心"
+      "orders": "我的订单",
+      "points": "积分明细"
     },
     "searchPlaceholder": "输入商品名称搜索...",
     "search": "搜索",
@@ -49,10 +49,10 @@
     "dashboard": "仪表盘",
     "nav": {
       "dashboard": "仪表盘",
-      "products": "产品管理",
+      "products": "商品管理",
       "categories": "分类管理",
       "points": "积分管理",
-      "orders": "兑换记录",
+      "orders": "订单管理",
       "users": "用户管理"
     },
     "metrics": {

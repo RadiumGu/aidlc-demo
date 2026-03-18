@@ -14,9 +14,25 @@ public interface ProductRepository {
 
     PageResult<ProductEntity> page(int page, int size, String name, String category);
 
+    PageResult<ProductEntity> page(int page, int size, String name, String category, String keyword);
+
     void save(ProductEntity entity);
 
     void update(ProductEntity entity);
 
     void deleteById(Long id);
+
+    /**
+     * 乐观锁扣减库存
+     *
+     * @return 受影响行数（0 表示库存不足）
+     */
+    int deductStock(Long id, int quantity);
+
+    /**
+     * 恢复库存
+     *
+     * @return 受影响行数
+     */
+    int restoreStock(Long id, int quantity);
 }

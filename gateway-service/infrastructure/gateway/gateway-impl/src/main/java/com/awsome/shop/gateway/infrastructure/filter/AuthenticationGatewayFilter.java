@@ -3,6 +3,7 @@ package com.awsome.shop.gateway.infrastructure.filter;
 import com.awsome.shop.gateway.common.constants.RouteConstants;
 import com.awsome.shop.gateway.common.enums.GatewayErrorCode;
 import com.awsome.shop.gateway.common.exception.AuthenticationException;
+import com.awsome.shop.gateway.common.exception.AuthorizationException;
 import com.awsome.shop.gateway.domain.auth.model.AuthenticationResult;
 import com.awsome.shop.gateway.domain.auth.model.TokenInfo;
 import com.awsome.shop.gateway.domain.auth.service.AuthenticationService;
@@ -25,8 +26,10 @@ import java.util.Map;
  *
  * <p>Order: +100 - executes after AccessLogFilter.</p>
  *
- * <p>Routes can opt out of authentication by setting route metadata
- * {@code auth-required: false} or by matching public path prefixes.</p>
+ * <p>Blocks external access to internal APIs (/api/v1/internal/**).
+ * Skips authentication for public paths (/api/v1/public/**).
+ * For all other paths, validates the JWT token via Auth Service and
+ * injects X-Operator-Id, X-Username, X-Role headers into the request.</p>
  */
 @Slf4j
 @Component
@@ -38,6 +41,11 @@ public class AuthenticationGatewayFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
+
+        // Block external access to internal APIs
+        if (path.startsWith(RouteConstants.PATH_PREFIX_INTERNAL)) {
+            return Mono.error(new AuthorizationException(GatewayErrorCode.AUTHZ_INTERNAL_ACCESS_DENIED));
+        }
 
         // Skip auth for public and docs paths
         if (isPublicPath(path)) {
@@ -67,16 +75,24 @@ public class AuthenticationGatewayFilter implements GlobalFilter, Ordered {
                                 GatewayErrorCode.AUTH_TOKEN_INVALID, result.getMessage()));
                     }
 
-                    log.debug("[{}] Authenticated operatorId: {}", requestId, result.getOperatorId());
+                    log.debug("[{}] Authenticated operatorId: {}, username: {}, role: {}",
+                            requestId, result.getOperatorId(), result.getUsername(), result.getRole());
 
                     // Store operatorId for downstream filters
                     exchange.getAttributes().put(RouteConstants.ATTR_OPERATOR_ID, result.getOperatorId());
 
-                    // Add operatorId header to request
-                    ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                            .header(RouteConstants.HEADER_OPERATOR_ID, result.getOperatorId())
-                            .build();
+                    // Add user info headers to request
+                    ServerHttpRequest.Builder requestBuilder = exchange.getRequest().mutate()
+                            .header(RouteConstants.HEADER_OPERATOR_ID, result.getOperatorId());
 
+                    if (result.getUsername() != null) {
+                        requestBuilder.header(RouteConstants.HEADER_USERNAME, result.getUsername());
+                    }
+                    if (result.getRole() != null) {
+                        requestBuilder.header(RouteConstants.HEADER_ROLE, result.getRole());
+                    }
+
+                    ServerHttpRequest mutatedRequest = requestBuilder.build();
                     return chain.filter(exchange.mutate().request(mutatedRequest).build());
                 });
     }

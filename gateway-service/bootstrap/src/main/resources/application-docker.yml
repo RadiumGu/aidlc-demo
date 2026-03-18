@@ -20,7 +20,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
-    # Druid 连接池配置 (生产环境调优)
+    # Druid 连接池配置
     druid:
       initial-size: 10
       min-idle: 5
@@ -32,10 +32,91 @@ spring:
       validation-query: SELECT 1
       time-between-eviction-runs-millis: 60000
       min-evictable-idle-time-millis: 300000
-
-      # 禁用 Druid 监控 (生产环境)
       stat-view-servlet:
         enabled: false
+
+  # Spring Cloud Gateway Routes
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth-public
+              uri: ${gateway.services.auth}
+              predicates:
+                - Path=/api/v1/public/auth/**
+              metadata:
+                auth-required: false
+            - id: product-public
+              uri: ${gateway.services.product}
+              predicates:
+                - Path=/api/v1/public/product/**
+              metadata:
+                auth-required: false
+            - id: point-public
+              uri: ${gateway.services.point}
+              predicates:
+                - Path=/api/v1/public/point/**
+              metadata:
+                auth-required: false
+            - id: order-public
+              uri: ${gateway.services.order}
+              predicates:
+                - Path=/api/v1/public/order/**
+              metadata:
+                auth-required: false
+            - id: product-admin
+              uri: ${gateway.services.product}
+              predicates:
+                - Path=/api/v1/admin/product/**
+              metadata:
+                auth-required: true
+            - id: points-admin
+              uri: ${gateway.services.point}
+              predicates:
+                - Path=/api/v1/admin/points/**
+              metadata:
+                auth-required: true
+            - id: order-admin
+              uri: ${gateway.services.order}
+              predicates:
+                - Path=/api/v1/admin/order/**
+              metadata:
+                auth-required: true
+            - id: auth-protected
+              uri: ${gateway.services.auth}
+              predicates:
+                - Path=/api/v1/auth/**
+              metadata:
+                auth-required: true
+            - id: product-protected
+              uri: ${gateway.services.product}
+              predicates:
+                - Path=/api/v1/product/**
+              metadata:
+                auth-required: true
+            - id: point-protected
+              uri: ${gateway.services.point}
+              predicates:
+                - Path=/api/v1/point/**, /api/v1/points/**
+              metadata:
+                auth-required: true
+            - id: order-protected
+              uri: ${gateway.services.order}
+              predicates:
+                - Path=/api/v1/order/**
+              metadata:
+                auth-required: true
+
+# Gateway backend service URLs (K8s Service DNS)
+gateway:
+  services:
+    auth: ${AUTH_SERVICE_URL:http://auth-service:8081}
+    product: ${PRODUCT_SERVICE_URL:http://product-service:8082}
+    point: ${POINTS_SERVICE_URL:http://points-service:8083}
+    order: ${ORDER_SERVICE_URL:http://order-service:8084}
+  auth:
+    validate-url: ${AUTH_SERVICE_URL:http://auth-service:8081}/api/v1/internal/auth/validate
 
 # MyBatis-Plus 配置
 mybatis-plus:

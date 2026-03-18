@@ -1,8 +1,7 @@
 package com.awsome.shop.product.application.impl.service.product;
 
 import com.awsome.shop.product.application.api.dto.product.ProductDTO;
-import com.awsome.shop.product.application.api.dto.product.request.CreateProductRequest;
-import com.awsome.shop.product.application.api.dto.product.request.ListProductRequest;
+import com.awsome.shop.product.application.api.dto.product.request.*;
 import com.awsome.shop.product.application.api.service.product.ProductApplicationService;
 import com.awsome.shop.product.common.dto.PageResult;
 import com.awsome.shop.product.domain.model.product.ProductEntity;
@@ -24,7 +23,8 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
     @Override
     public PageResult<ProductDTO> list(ListProductRequest request) {
         PageResult<ProductEntity> page = productDomainService.page(
-                request.getPage(), request.getSize(), request.getName(), request.getCategory());
+                request.getPage(), request.getSize(), request.getName(),
+                request.getCategory(), request.getKeyword());
         return page.convert(this::toDTO);
     }
 
@@ -37,6 +37,39 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
                 request.getSubtitle(), request.getDeliveryMethod(), request.getServiceGuarantee(),
                 request.getPromotion(), request.getColors(), request.getSpecs());
         return toDTO(entity);
+    }
+
+    @Override
+    public ProductDTO update(UpdateProductRequest request) {
+        ProductEntity entity = productDomainService.update(
+                request.getId(), request.getName(), request.getSku(), request.getCategory(),
+                request.getBrand(), request.getPointsPrice(), request.getMarketPrice(),
+                request.getStock(), request.getStatus(), request.getDescription(),
+                request.getImageUrl(), request.getSubtitle(), request.getDeliveryMethod(),
+                request.getServiceGuarantee(), request.getPromotion(), request.getColors(),
+                request.getSpecs());
+        return toDTO(entity);
+    }
+
+    @Override
+    public ProductDTO detail(Long id) {
+        ProductEntity entity = productDomainService.getById(id);
+        return toDTO(entity);
+    }
+
+    @Override
+    public void updateStatus(UpdateStatusRequest request) {
+        productDomainService.updateStatus(request.getId(), request.getStatus());
+    }
+
+    @Override
+    public void deductStock(DeductStockRequest request) {
+        productDomainService.deductStock(request.getProductId(), request.getQuantity());
+    }
+
+    @Override
+    public void restoreStock(RestoreStockRequest request) {
+        productDomainService.restoreStock(request.getProductId(), request.getQuantity());
     }
 
     private ProductDTO toDTO(ProductEntity entity) {

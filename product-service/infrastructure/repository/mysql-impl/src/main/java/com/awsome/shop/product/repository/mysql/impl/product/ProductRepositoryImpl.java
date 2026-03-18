@@ -39,14 +39,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public PageResult<ProductEntity> page(int page, int size, String name, String category) {
         IPage<ProductPO> result = productMapper.selectPage(new Page<>(page, size), name, category);
+        return toPageResult(result);
+    }
 
-        PageResult<ProductEntity> pageResult = new PageResult<>();
-        pageResult.setCurrent(result.getCurrent());
-        pageResult.setSize(result.getSize());
-        pageResult.setTotal(result.getTotal());
-        pageResult.setPages(result.getPages());
-        pageResult.setRecords(result.getRecords().stream().map(this::toEntity).collect(Collectors.toList()));
-        return pageResult;
+    @Override
+    public PageResult<ProductEntity> page(int page, int size, String name, String category, String keyword) {
+        IPage<ProductPO> result = productMapper.selectPageWithKeyword(new Page<>(page, size), name, category, keyword);
+        return toPageResult(result);
     }
 
     @Override
@@ -65,6 +64,26 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void deleteById(Long id) {
         productMapper.deleteById(id);
+    }
+
+    @Override
+    public int deductStock(Long id, int quantity) {
+        return productMapper.deductStock(id, quantity);
+    }
+
+    @Override
+    public int restoreStock(Long id, int quantity) {
+        return productMapper.restoreStock(id, quantity);
+    }
+
+    private PageResult<ProductEntity> toPageResult(IPage<ProductPO> result) {
+        PageResult<ProductEntity> pageResult = new PageResult<>();
+        pageResult.setCurrent(result.getCurrent());
+        pageResult.setSize(result.getSize());
+        pageResult.setTotal(result.getTotal());
+        pageResult.setPages(result.getPages());
+        pageResult.setRecords(result.getRecords().stream().map(this::toEntity).collect(Collectors.toList()));
+        return pageResult;
     }
 
     private ProductEntity toEntity(ProductPO po) {

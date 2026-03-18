@@ -1,0 +1,31 @@
+# ============================================================
+# ALB Ingress — 复用 PetSite 现有 ALB
+# 所有 /shop/* 流量 → Frontend（Nginx 内部 proxy /api → Gateway）
+# ============================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: awesomeshop-ingress
+  namespace: awesomeshop
+  annotations:
+    alb.ingress.kubernetes.io/group.name: petsite-shared
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-northeast-1:926093770964:certificate/900c3d55-5e44-4977-9214-853dc2540468"
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/security-groups: sg-0ae59648161ef4d63
+    alb.ingress.kubernetes.io/group.order: "100"
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /shop
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80

@@ -25,4 +25,44 @@
         ORDER BY created_at DESC
     </select>
 
+    <!-- 分页查询（支持关键词搜索） -->
+    <select id="selectPageWithKeyword" resultMap="productResultMap">
+        SELECT id, name, sku, category, brand, points_price, market_price, stock, sold_count,
+               status, description, image_url, subtitle, delivery_method, service_guarantee,
+               promotion, colors, specs, created_at, updated_at, created_by, updated_by, deleted, version
+        FROM product
+        WHERE deleted = 0
+        <if test="name != null and name != ''">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="category != null and category != ''">
+            AND category = #{category}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (name LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 乐观锁扣减库存 -->
+    <update id="deductStock">
+        UPDATE product
+        SET stock = stock - #{quantity},
+            sold_count = sold_count + #{quantity},
+            updated_at = NOW()
+        WHERE id = #{id}
+          AND stock >= #{quantity}
+          AND deleted = 0
+    </update>
+
+    <!-- 恢复库存 -->
+    <update id="restoreStock">
+        UPDATE product
+        SET stock = stock + #{quantity},
+            sold_count = GREATEST(sold_count - #{quantity}, 0),
+            updated_at = NOW()
+        WHERE id = #{id}
+          AND deleted = 0
+    </update>
+
 </mapper>

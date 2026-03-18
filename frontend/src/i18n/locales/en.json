@@ -29,8 +29,8 @@
   "employee": {
     "nav": {
       "home": "Home",
-      "orders": "Orders",
-      "points": "Points"
+      "orders": "My Orders",
+      "points": "Points History"
     },
     "searchPlaceholder": "Search products...",
     "search": "Search",

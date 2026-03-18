@@ -18,12 +18,18 @@ public class AuthenticationResult {
 
     private String operatorId;
 
+    private String username;
+
+    private String role;
+
     private String message;
 
-    public static AuthenticationResult success(String operatorId) {
+    public static AuthenticationResult success(String operatorId, String username, String role) {
         return AuthenticationResult.builder()
                 .authenticated(true)
                 .operatorId(operatorId)
+                .username(username)
+                .role(role)
                 .build();
     }
 

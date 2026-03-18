@@ -89,6 +89,13 @@ security:
     lock-duration: 1800
 
 # Shop 配置
+# 远程服务配置
+product-service:
+  url: http://localhost:8002
+
+points-service:
+  url: http://localhost:8003
+
 shop:
   security:
     encryption:

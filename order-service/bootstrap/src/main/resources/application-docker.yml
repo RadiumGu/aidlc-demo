@@ -61,6 +61,13 @@ shop:
     encryption:
       key: ${ENCRYPTION_KEY:dockerEncryptionKey1234567890ab}
 
+# 远程服务配置 (K8s Service DNS)
+product-service:
+  url: ${PRODUCT_SERVICE_URL:http://product-service:8082}
+
+points-service:
+  url: ${POINTS_SERVICE_URL:http://points-service:8083}
+
 # 日志配置
 logging:
   level:

@@ -61,5 +61,16 @@ management:
     tags:
       application: awsome-shop-auth-service
 
+# Security 配置（默认值，各环境可覆盖）
+security:
+  jwt:
+    secret: ${JWT_SECRET:change-me-in-production-must-be-at-least-256-bits-long-for-hmac-sha256}
+    expiration: 7200
+    refresh-expiration: 604800
+    issuer: awsome-shop-auth-service
+  login:
+    max-failed-attempts: 5
+    lock-duration: 1800
+
 # 说明: 本文件包含所有环境共享的配置
 # 环境特定配置请在对应的 application-{profile}.yml 中覆盖

@@ -90,6 +90,28 @@ spring:
               metadata:
                 auth-required: false
 
+            # ==================== Admin Routes (auth + ADMIN role required) ====================
+            - id: product-admin
+              uri: ${gateway.services.product}
+              predicates:
+                - Path=/api/v1/admin/product/**
+              metadata:
+                auth-required: true
+
+            - id: points-admin
+              uri: ${gateway.services.point}
+              predicates:
+                - Path=/api/v1/admin/points/**
+              metadata:
+                auth-required: true
+
+            - id: order-admin
+              uri: ${gateway.services.order}
+              predicates:
+                - Path=/api/v1/admin/order/**
+              metadata:
+                auth-required: true
+
             # ==================== Protected Routes (auth required) ====================
             - id: auth-protected
               uri: ${gateway.services.auth}
@@ -108,7 +130,7 @@ spring:
             - id: point-protected
               uri: ${gateway.services.point}
               predicates:
-                - Path=/api/v1/point/**
+                - Path=/api/v1/point/**, /api/v1/points/**
               metadata:
                 auth-required: true
 

@@ -20,4 +20,9 @@ public class ListProductRequest {
     private String name;
 
     private String category;
+
+    /**
+     * 关键词搜索（模糊匹配 name 和 description）
+     */
+    private String keyword;
 }

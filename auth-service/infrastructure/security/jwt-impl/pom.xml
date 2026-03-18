@@ -26,6 +26,20 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- Domain API (JwtTokenService interface) -->
+        <dependency>
+            <groupId>com.awsome.shop</groupId>
+            <artifactId>domain-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Redis Implementation (TokenBlacklistService) -->
+        <dependency>
+            <groupId>com.awsome.shop</groupId>
+            <artifactId>redis-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Spring Boot Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
