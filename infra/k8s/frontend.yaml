@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 926093770964.dkr.ecr.ap-northeast-1.amazonaws.com/awesomeshop/frontend:v5
+          image: 926093770964.dkr.ecr.ap-northeast-1.amazonaws.com/awesomeshop/frontend:v11
           ports:
             - containerPort: 80
           resources:

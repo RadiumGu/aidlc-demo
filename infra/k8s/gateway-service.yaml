@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: 926093770964.dkr.ecr.ap-northeast-1.amazonaws.com/awesomeshop/gateway-service:v4
+          image: 926093770964.dkr.ecr.ap-northeast-1.amazonaws.com/awesomeshop/gateway-service:v5
           ports:
             - containerPort: 8081
           env:

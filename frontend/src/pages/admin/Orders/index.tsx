@@ -22,7 +22,8 @@ interface Order {
   orderNo?: string;
   username?: string;
   productName: string;
-  points: number;
+  points?: number;
+  totalPoints?: number;
   status: string;
   createdAt: string;
 }
@@ -167,7 +168,7 @@ export default function AdminOrders() {
                           {order.productName}
                         </TableCell>
                         <TableCell sx={{ fontSize: 13, py: '12px', px: '20px', fontWeight: 600, color: '#D97706' }}>
-                          {order.points?.toLocaleString()}
+                          {(order.totalPoints ?? order.points ?? 0)?.toLocaleString()}
                         </TableCell>
                         <TableCell sx={{ py: '12px', px: '20px' }}>
                           <Chip

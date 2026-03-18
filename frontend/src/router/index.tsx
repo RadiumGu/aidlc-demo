@@ -10,6 +10,8 @@ import Dashboard from '../pages/Dashboard';
 import AdminProducts from '../pages/admin/Products';
 import AdminOrders from '../pages/admin/Orders';
 import AdminPoints from '../pages/admin/Points';
+import AdminCategories from '../pages/admin/Categories';
+import AdminUsers from '../pages/admin/Users';
 import AuthGuard from './AuthGuard';
 
 const router = createBrowserRouter(
@@ -45,6 +47,8 @@ const router = createBrowserRouter(
         { path: 'products', element: <AdminProducts /> },
         { path: 'orders', element: <AdminOrders /> },
         { path: 'points', element: <AdminPoints /> },
+        { path: 'categories', element: <AdminCategories /> },
+        { path: 'users', element: <AdminUsers /> },
       ],
     },
     {

@@ -29,7 +29,8 @@ interface Product {
   id: number;
   name: string;
   category: string;
-  points: number;
+  points?: number;
+  pointsPrice?: number;
   stock: number;
   status: number;
   description?: string;
@@ -122,7 +123,7 @@ export default function AdminProducts() {
     setForm({
       name: product.name,
       category: product.category,
-      points: product.points,
+      points: product.pointsPrice ?? product.points ?? 0,
       stock: product.stock,
       description: product.description || '',
     });
@@ -214,7 +215,7 @@ export default function AdminProducts() {
                         {product.category}
                       </TableCell>
                       <TableCell sx={{ fontSize: 13, py: '12px', px: '20px', fontWeight: 600, color: '#D97706' }}>
-                        {product.points?.toLocaleString()}
+                        {(product.pointsPrice ?? product.points ?? 0)?.toLocaleString()}
                       </TableCell>
                       <TableCell sx={{ fontSize: 13, py: '12px', px: '20px' }}>
                         {product.stock}

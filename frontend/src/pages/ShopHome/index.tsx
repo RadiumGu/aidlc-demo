@@ -54,7 +54,8 @@ interface Product {
   rating?: number;
   reviews?: number;
   sold?: number;
-  points: number;
+  pointsPrice: number;
+  points?: number;
   imageUrl?: string;
   status?: string;
 }
@@ -294,7 +295,7 @@ export default function ShopHome() {
                       <Typography
                         sx={{ fontSize: 18, fontWeight: 700, color: '#D97706' }}
                       >
-                        {product.points.toLocaleString()}
+                        {(product.pointsPrice ?? product.points ?? 0).toLocaleString()}
                       </Typography>
                     </Box>
                     <Button

@@ -21,7 +21,8 @@ interface Order {
   id: number;
   orderNo?: string;
   productName: string;
-  points: number;
+  points?: number;
+  totalPoints?: number;
   status: string;
   createdAt: string;
   quantity?: number;
@@ -149,7 +150,7 @@ export default function Orders() {
                           {order.productName}
                         </TableCell>
                         <TableCell sx={{ fontSize: 13, py: '12px', px: '20px' }}>
-                          {order.points?.toLocaleString()}
+                          {(order.totalPoints ?? order.points ?? 0)?.toLocaleString()}
                         </TableCell>
                         <TableCell sx={{ py: '12px', px: '20px' }}>
                           <Chip
