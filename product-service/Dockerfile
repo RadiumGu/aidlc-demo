@@ -11,6 +11,7 @@ RUN mvn clean package -DskipTests -B
 # Stage 2: Run
 FROM eclipse-temurin:21-jre
 WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /app/uploads
 COPY --from=builder /app/product-service-app/target/product-service-app-*.jar app.jar
 EXPOSE 8002

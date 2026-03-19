@@ -1,0 +1,8 @@
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/api-gateway/api-gateway-app/src/main/java/com/awsome/shop/gateway/GatewayApplication.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/api-gateway/api-gateway-app/src/main/java/com/awsome/shop/gateway/config/AccessRuleConfig.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/api-gateway/api-gateway-app/src/main/java/com/awsome/shop/gateway/config/RestTemplateConfig.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/api-gateway/api-gateway-app/src/main/java/com/awsome/shop/gateway/config/RouteConfig.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/api-gateway/api-gateway-app/src/main/java/com/awsome/shop/gateway/controller/GatewayController.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/api-gateway/api-gateway-app/src/main/java/com/awsome/shop/gateway/filter/AuthenticationFilter.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/api-gateway/api-gateway-app/src/main/java/com/awsome/shop/gateway/filter/AuthorizationFilter.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/api-gateway/api-gateway-app/src/main/java/com/awsome/shop/gateway/handler/GlobalExceptionHandler.java

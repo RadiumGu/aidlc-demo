@@ -9,5 +9,7 @@ public class CategoryTreeNode {
     private Long id;
     private String name;
     private Integer sortOrder;
+    private String status;
+    private Long productCount;
     private List<CategoryTreeNode> children = new ArrayList<>();
 }

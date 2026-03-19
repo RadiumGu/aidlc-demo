@@ -3,6 +3,7 @@ package com.awsome.shop.order.controller;
 import com.awsome.shop.order.common.PageResult;
 import com.awsome.shop.order.common.Result;
 import com.awsome.shop.order.dto.OrderResponse;
+import com.awsome.shop.order.dto.StatsResponse;
 import com.awsome.shop.order.dto.UpdateOrderStatusRequest;
 import com.awsome.shop.order.service.OrderService;
 import jakarta.validation.Valid;
@@ -36,6 +37,15 @@ public class AdminOrderController {
     }
 
     /**
+     * 查看兑换详情
+     */
+    @GetMapping("/{id}")
+    public Result<OrderResponse> getOrderById(@PathVariable Long id) {
+        OrderResponse response = orderService.getOrderById(id);
+        return Result.success(response);
+    }
+
+    /**
      * 更新兑换状态
      */
     @PutMapping("/{id}/status")
@@ -44,5 +54,15 @@ public class AdminOrderController {
             @Valid @RequestBody UpdateOrderStatusRequest request) {
         OrderResponse response = orderService.updateOrderStatus(id, request.getStatus());
         return Result.success(response);
+    }
+
+    @GetMapping("/user-counts")
+    public Result<java.util.Map<Long, Long>> getUserOrderCounts() {
+        return Result.success(orderService.getUserOrderCounts());
+    }
+
+    @GetMapping("/stats")
+    public Result<StatsResponse> stats() {
+        return Result.success(orderService.getStats());
     }
 }

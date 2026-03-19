@@ -111,6 +111,31 @@
     </springProfile>
 
     <!-- ================================ -->
+    <!-- Docker 环境配置 (容器化部署)      -->
+    <!-- ================================ -->
+    <springProfile name="docker">
+        <!-- 控制台输出 Appender (容器日志收集) -->
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %5p [%15.15t] %-40.40logger{39} : %m%n%wEx</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+
+        <!-- Root Logger -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+
+        <!-- 项目包日志级别 INFO -->
+        <logger name="com.awsome.shop.auth" level="INFO"/>
+
+        <!-- 框架包日志级别 WARN -->
+        <logger name="org.springframework" level="WARN"/>
+        <logger name="com.baomidou" level="WARN"/>
+    </springProfile>
+
+    <!-- ================================ -->
     <!-- Staging/Prod 环境配置            -->
     <!-- ================================ -->
     <springProfile name="staging,prod">

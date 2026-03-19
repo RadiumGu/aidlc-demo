@@ -95,6 +95,14 @@ public class AuthAppServiceImpl implements AuthAppService {
         return toUserResponse(user);
     }
 
+    @Override
+    public StatsResponse getStats() {
+        long total = userService.countAll();
+        long monthNew = userService.countCreatedSince(
+                java.time.LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay());
+        return StatsResponse.builder().total(total).monthNew(monthNew).build();
+    }
+
     private UserResponse toUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())

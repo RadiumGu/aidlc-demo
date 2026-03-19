@@ -61,7 +61,7 @@ export default function AvatarMenu() {
   const currentLang = i18n.language === 'zh' ? t('menu.langZh') : t('menu.langEn');
   const currentTheme = darkMode ? t('menu.themeDark') : t('menu.themeLight');
   const roleLabel =
-    user?.role === 'admin' ? t('menu.roleAdmin') : t('menu.roleEmployee');
+    user?.role === 'ADMIN' ? t('menu.roleAdmin') : t('menu.roleEmployee');
 
   return (
     <>
@@ -76,7 +76,7 @@ export default function AvatarMenu() {
         }}
         onClick={handleOpen}
       >
-        {user?.displayName?.charAt(0) ?? ''}
+        {user?.username?.charAt(0) ?? ''}
       </Avatar>
       <Menu
         anchorEl={anchorEl}
@@ -100,7 +100,7 @@ export default function AvatarMenu() {
         {/* User Info */}
         <Box sx={{ px: '16px', py: '12px' }}>
           <Typography sx={{ fontSize: 14, fontWeight: 600, color: '#1E293B' }}>
-            {user?.displayName}
+            {user?.username}
           </Typography>
           <Typography sx={{ fontSize: 12, color: '#64748B' }}>
             {roleLabel}

@@ -47,8 +47,7 @@ public class PointsService {
      * 查询用户积分余额
      */
     public PointBalanceResponse getBalance(Long userId) {
-        PointBalancePO balance = getBalanceByUserId(userId);
-        return toBalanceResponse(balance);
+        return getBalanceByUserId(userId);
     }
 
     /**
@@ -228,12 +227,27 @@ public class PointsService {
                         .eq(PointBalancePO::getUserId, userId)
         );
         if (balance == null) {
-            throw new BusinessException(PointsErrorCode.BALANCE_NOT_FOUND);
+            PointBalanceResponse resp = new PointBalanceResponse();
+            resp.setUserId(userId);
+            resp.setBalance(0);
+            return resp;
         }
         return toBalanceResponse(balance);
     }
 
     // ========== 转换方法 ==========
+
+    public StatsResponse getStats() {
+        java.time.LocalDateTime monthStart = java.time.LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay();
+        // Sum positive amounts (DISTRIBUTION + MANUAL_ADD) this month
+        LambdaQueryWrapper<PointTransactionPO> wrapper = new LambdaQueryWrapper<PointTransactionPO>()
+                .ge(PointTransactionPO::getCreatedAt, monthStart)
+                .gt(PointTransactionPO::getAmount, 0)
+                .in(PointTransactionPO::getType, TransactionType.DISTRIBUTION, TransactionType.MANUAL_ADD);
+        java.util.List<PointTransactionPO> txs = pointTransactionMapper.selectList(wrapper);
+        long total = txs.stream().mapToLong(PointTransactionPO::getAmount).sum();
+        return StatsResponse.builder().monthDistributed(total).build();
+    }
 
     private PointBalanceResponse toBalanceResponse(PointBalancePO po) {
         PointBalanceResponse resp = new PointBalanceResponse();

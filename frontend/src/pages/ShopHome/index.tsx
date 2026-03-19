@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -6,133 +7,38 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Rating from '@mui/material/Rating';
+import CardMedia from '@mui/material/CardMedia';
+import Pagination from '@mui/material/Pagination';
+import CircularProgress from '@mui/material/CircularProgress';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import HeadphonesIcon from '@mui/icons-material/Headphones';
-import WatchIcon from '@mui/icons-material/Watch';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import BackpackIcon from '@mui/icons-material/Backpack';
 import TollIcon from '@mui/icons-material/Toll';
-
-const CATEGORIES = [
-  { key: 'all', label: '全部' },
-  { key: 'digital', label: '数码电子' },
-  { key: 'life', label: '生活家居' },
-  { key: 'food', label: '美食餐饮' },
-  { key: 'gift', label: '礼品卡券' },
-  { key: 'office', label: '办公用品' },
-];
-
-const PRODUCTS = [
-  {
-    id: 1,
-    name: 'Sony WH-1000XM5 降噪耳机',
-    category: 'digital',
-    categoryLabel: '数码电子',
-    rating: 4.5,
-    reviews: 128,
-    sold: 86,
-    points: 2580,
-    icon: HeadphonesIcon,
-    bgColor: '#DBEAFE',
-    iconColor: '#2563EB',
-    tag: '热销',
-    tagColor: '#DC2626',
-  },
-  {
-    id: 2,
-    name: 'Apple Watch Series 9',
-    category: 'digital',
-    categoryLabel: '数码电子',
-    rating: 5.0,
-    reviews: 56,
-    sold: 32,
-    points: 3200,
-    icon: WatchIcon,
-    bgColor: '#EDE9FE',
-    iconColor: '#7C3AED',
-    tag: '新品',
-    tagColor: '#2563EB',
-  },
-  {
-    id: 3,
-    name: '星巴克礼品卡 200元',
-    category: 'gift',
-    categoryLabel: '礼品卡券',
-    rating: 4.0,
-    reviews: 203,
-    sold: 156,
-    points: 680,
-    icon: CardGiftcardIcon,
-    bgColor: '#DCFCE7',
-    iconColor: '#16A34A',
-    tag: null,
-    tagColor: null,
-  },
-  {
-    id: 4,
-    name: '小米双肩背包 都市休闲款',
-    category: 'life',
-    categoryLabel: '生活家居',
-    rating: 4.5,
-    reviews: 75,
-    sold: 41,
-    points: 450,
-    icon: BackpackIcon,
-    bgColor: '#FEF3C7',
-    iconColor: '#D97706',
-    tag: '特惠',
-    tagColor: '#F59E0B',
-  },
-];
+import ImageIcon from '@mui/icons-material/Image';
+import { useProductStore } from '../../store/useProductStore';
 
 export default function ShopHome() {
   const { t } = useTranslation();
-  const [activeCategory, setActiveCategory] = useState('all');
+  const navigate = useNavigate();
+  const { products, total, loading, categories, fetchProducts, fetchCategories } = useProductStore();
+  const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const pageSize = 8;
 
-  const filteredProducts =
-    activeCategory === 'all'
-      ? PRODUCTS
-      : PRODUCTS.filter((p) => p.category === activeCategory);
+  useEffect(() => { fetchCategories(); }, [fetchCategories]);
+  useEffect(() => {
+    fetchProducts({ page, size: pageSize, categoryId: activeCategoryId ?? undefined });
+  }, [fetchProducts, page, activeCategoryId]);
+
+  const totalPages = Math.ceil(total / pageSize);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, p: '24px 32px' }}>
       {/* Hero Banner */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: 160,
-          borderRadius: '12px',
-          px: '40px',
-          background: 'linear-gradient(90deg, #2563EB 0%, #60A5FA 100%)',
-        }}
-      >
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 160, borderRadius: '12px', px: '40px', background: 'linear-gradient(90deg, #2563EB 0%, #60A5FA 100%)' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Typography sx={{ fontSize: 28, fontWeight: 700, color: '#fff' }}>
-            {t('employee.heroTitle')}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>
-            {t('employee.heroSubtitle')}
-          </Typography>
-          <Button
-            size="small"
-            endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
-            sx={{
-              bgcolor: '#fff',
-              color: '#2563EB',
-              borderRadius: '20px',
-              px: '20px',
-              py: '8px',
-              fontSize: 13,
-              fontWeight: 600,
-              textTransform: 'none',
-              alignSelf: 'flex-start',
-              '&:hover': { bgcolor: '#f0f0f0' },
-            }}
-          >
+          <Typography sx={{ fontSize: 28, fontWeight: 700, color: '#fff' }}>{t('employee.heroTitle')}</Typography>
+          <Typography sx={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{t('employee.heroSubtitle')}</Typography>
+          <Button size="small" endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />} sx={{ bgcolor: '#fff', color: '#2563EB', borderRadius: '20px', px: '20px', py: '8px', fontSize: 13, fontWeight: 600, textTransform: 'none', alignSelf: 'flex-start', '&:hover': { bgcolor: '#f0f0f0' } }}>
             {t('employee.heroBrowse')}
           </Button>
         </Box>
@@ -140,156 +46,52 @@ export default function ShopHome() {
       </Box>
 
       {/* Category Filter */}
-      <Box sx={{ display: 'flex', gap: '8px' }}>
-        {CATEGORIES.map((cat) => (
-          <Chip
-            key={cat.key}
-            label={cat.label}
-            onClick={() => setActiveCategory(cat.key)}
-            sx={{
-              borderRadius: '20px',
-              fontSize: 13,
-              fontWeight: activeCategory === cat.key ? 600 : 400,
-              color: activeCategory === cat.key ? '#fff' : '#64748B',
-              bgcolor: activeCategory === cat.key ? '#2563EB' : '#fff',
-              border: activeCategory === cat.key ? 'none' : '1px solid #E2E8F0',
-              height: 'auto',
-              py: '8px',
-              px: '18px',
-              '& .MuiChip-label': { p: 0 },
-              '&:hover': {
-                bgcolor: activeCategory === cat.key ? '#2563EB' : '#F8FAFC',
-              },
-            }}
-          />
+      <Box sx={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <Chip label={t('employee.allCategories') || '全部'} onClick={() => { setActiveCategoryId(null); setPage(1); }}
+          sx={{ borderRadius: '20px', fontSize: 13, fontWeight: activeCategoryId === null ? 600 : 400, color: activeCategoryId === null ? '#fff' : '#64748B', bgcolor: activeCategoryId === null ? '#2563EB' : '#fff', border: activeCategoryId === null ? 'none' : '1px solid #E2E8F0', py: '8px', px: '18px', '& .MuiChip-label': { p: 0 } }} />
+        {categories.map((cat) => (
+          <Chip key={cat.id} label={cat.name} onClick={() => { setActiveCategoryId(cat.id); setPage(1); }}
+            sx={{ borderRadius: '20px', fontSize: 13, fontWeight: activeCategoryId === cat.id ? 600 : 400, color: activeCategoryId === cat.id ? '#fff' : '#64748B', bgcolor: activeCategoryId === cat.id ? '#2563EB' : '#fff', border: activeCategoryId === cat.id ? 'none' : '1px solid #E2E8F0', py: '8px', px: '18px', '& .MuiChip-label': { p: 0 } }} />
         ))}
       </Box>
 
       {/* Product Grid */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '20px',
-        }}
-      >
-        {filteredProducts.map((product) => {
-          const IconComp = product.icon;
-          return (
-            <Card
-              key={product.id}
-              sx={{
-                borderRadius: '12px',
-                border: '1px solid',
-                borderColor: '#F1F5F9',
-                boxShadow: 'none',
-                cursor: 'pointer',
-                overflow: 'hidden',
-                '&:hover': { boxShadow: 2 },
-              }}
-            >
-              {/* Product Image Area */}
-              <Box
-                sx={{
-                  position: 'relative',
-                  height: 200,
-                  bgcolor: product.bgColor,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <IconComp sx={{ fontSize: 64, color: product.iconColor }} />
-                {product.tag && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      bgcolor: product.tagColor,
-                      color: '#fff',
-                      fontSize: 11,
-                      fontWeight: 600,
-                      px: '10px',
-                      py: '4px',
-                      borderRadius: '0 0 8px 0',
-                    }}
-                  >
-                    {product.tag}
-                  </Box>
-                )}
-              </Box>
-
-              <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: '10px', p: '16px', '&:last-child': { pb: '16px' } }}>
-                <Typography
-                  sx={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {product.name}
-                </Typography>
-                <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
-                  {product.categoryLabel}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Rating
-                    value={product.rating}
-                    precision={0.5}
-                    size="small"
-                    readOnly
-                    sx={{
-                      '& .MuiRating-iconFilled': { color: '#F59E0B' },
-                      '& .MuiRating-iconHover': { color: '#F59E0B' },
-                      '& .MuiRating-iconEmpty': { color: '#E2E8F0' },
-                      fontSize: 14,
-                    }}
-                  />
-                  <Typography sx={{ fontSize: 11, color: '#64748B' }}>
-                    {product.rating} ({product.reviews})
-                  </Typography>
-                  <Typography sx={{ fontSize: 11, color: '#CBD5E1' }}>
-                    · {t('employee.sold')} {product.sold} {t('employee.soldUnit')}
-                  </Typography>
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}><CircularProgress /></Box>
+      ) : (
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+          {products.map((product) => (
+            <Card key={product.id} onClick={() => navigate(`/product/${product.id}`)} sx={{ borderRadius: '12px', border: '1px solid #F1F5F9', boxShadow: 'none', cursor: 'pointer', overflow: 'hidden', '&:hover': { boxShadow: 2 } }}>
+              {product.imageUrl ? (
+                <CardMedia component="img" height={200} image={product.imageUrl} alt={product.name} sx={{ objectFit: 'cover' }} />
+              ) : (
+                <Box sx={{ height: 200, bgcolor: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ImageIcon sx={{ fontSize: 64, color: '#CBD5E1' }} />
                 </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
+              )}
+              <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: '10px', p: '16px', '&:last-child': { pb: '16px' } }}>
+                <Typography sx={{ fontSize: 15, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.name}</Typography>
+                <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>{product.categoryName}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <TollIcon sx={{ fontSize: 18, color: '#D97706' }} />
-                    <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#D97706' }}>
-                      {product.points.toLocaleString()}
-                    </Typography>
+                    <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#D97706' }}>{product.pointsPrice.toLocaleString()}</Typography>
                   </Box>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      borderRadius: '8px',
-                      px: '14px',
-                      py: '6px',
-                      fontSize: 13,
-                      fontWeight: 600,
-                      textTransform: 'none',
-                      minWidth: 'auto',
-                    }}
-                  >
+                  <Button variant="contained" size="small" sx={{ borderRadius: '8px', px: '14px', py: '6px', fontSize: 13, fontWeight: 600, textTransform: 'none', minWidth: 'auto' }}>
                     {t('employee.redeem')}
                   </Button>
                 </Box>
               </CardContent>
             </Card>
-          );
-        })}
-      </Box>
+          ))}
+        </Box>
+      )}
+
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Pagination count={totalPages} page={page} onChange={(_, v) => setPage(v)} color="primary" />
+        </Box>
+      )}
     </Box>
   );
 }

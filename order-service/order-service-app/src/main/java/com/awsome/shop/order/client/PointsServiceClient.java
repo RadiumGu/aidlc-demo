@@ -62,7 +62,7 @@ public class PointsServiceClient {
         Map<String, Object> body = new HashMap<>();
         body.put("userId", userId);
         body.put("amount", amount);
-        body.put("referenceId", orderId);
+        body.put("orderId", orderId);
         try {
             return executeWithRetry(() -> {
                 ResponseEntity<Map<String, Object>> resp = restTemplate.exchange(

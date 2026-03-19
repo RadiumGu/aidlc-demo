@@ -19,4 +19,6 @@ public interface AuthAppService {
     UserResponse getUserById(Long id);
 
     UserResponse updateUser(Long id, UpdateUserRequest request, Long operatorId);
+
+    StatsResponse getStats();
 }

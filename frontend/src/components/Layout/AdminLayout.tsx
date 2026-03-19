@@ -10,6 +10,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import TollIcon from '@mui/icons-material/Toll';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import GroupIcon from '@mui/icons-material/Group';
+import SettingsIcon from '@mui/icons-material/Settings';
 import AvatarMenu from '../AvatarMenu';
 
 const SIDEBAR_WIDTH = 240;
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { key: 'points', path: '/admin/points', icon: TollIcon },
   { key: 'orders', path: '/admin/orders', icon: ReceiptLongIcon },
   { key: 'users', path: '/admin/users', icon: GroupIcon },
+  { key: 'pointsConfig', path: '/admin/points/config', icon: SettingsIcon },
 ];
 
 export default function AdminLayout() {

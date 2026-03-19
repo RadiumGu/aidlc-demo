@@ -1,0 +1,10 @@
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/enums/OrderErrorCode.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/dto/OrderResponse.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/dto/StatsResponse.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/common/PageResult.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/dto/UpdateOrderStatusRequest.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/common/Result.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/enums/OrderStatus.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/common/ErrorCode.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/dto/CreateOrderRequest.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-api/src/main/java/com/awsome/shop/order/common/BusinessException.java

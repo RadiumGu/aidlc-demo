@@ -13,4 +13,12 @@ public class CreateOrderRequest {
     @NotNull(message = "产品ID不能为空")
     @Min(value = 1, message = "产品ID必须大于0")
     private Long productId;
+
+    private String username;
+
+    private String receiverName;
+
+    private String receiverPhone;
+
+    private String receiverAddress;
 }

@@ -26,7 +26,7 @@ public class OrderController {
     public Result<OrderResponse> createOrder(
             @RequestHeader("X-User-Id") Long userId,
             @Valid @RequestBody CreateOrderRequest request) {
-        OrderResponse response = orderService.createOrder(userId, request.getProductId());
+        OrderResponse response = orderService.createOrder(userId, request);
         return Result.success(response);
     }
 

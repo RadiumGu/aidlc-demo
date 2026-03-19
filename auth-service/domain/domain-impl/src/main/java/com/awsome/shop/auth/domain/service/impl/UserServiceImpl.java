@@ -61,4 +61,14 @@ public class UserServiceImpl implements UserService {
         userRepository.update(user);
         return userRepository.findById(id);
     }
+
+    @Override
+    public long countAll() {
+        return userRepository.countAll();
+    }
+
+    @Override
+    public long countCreatedSince(java.time.LocalDateTime since) {
+        return userRepository.countCreatedSince(since);
+    }
 }

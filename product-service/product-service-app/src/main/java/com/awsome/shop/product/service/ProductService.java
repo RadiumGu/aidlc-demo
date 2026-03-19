@@ -59,6 +59,7 @@ public class ProductService {
         if (request.getPointsPrice() != null) po.setPointsPrice(request.getPointsPrice());
         if (request.getStock() != null) po.setStock(request.getStock());
         if (request.getImageUrl() != null) po.setImageUrl(request.getImageUrl());
+        if (request.getStatus() != null) po.setStatus(request.getStatus());
 
         productMapper.updateById(po);
         return toResponse(po);
@@ -175,6 +176,14 @@ public class ProductService {
     }
 
     // ==================== 私有方法 ====================
+
+    public StatsResponse getStats() {
+        long total = productMapper.selectCount(null);
+        long monthNew = productMapper.selectCount(
+                new LambdaQueryWrapper<ProductPO>()
+                        .ge(ProductPO::getCreatedAt, java.time.LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay()));
+        return StatsResponse.builder().total(total).monthNew(monthNew).build();
+    }
 
     private void applyCategoryFilter(LambdaQueryWrapper<ProductPO> wrapper, Long categoryId) {
         if (categoryId != null) {

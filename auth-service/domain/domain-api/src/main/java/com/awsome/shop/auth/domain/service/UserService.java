@@ -29,4 +29,11 @@ public interface UserService {
      * @return 更新后的用户
      */
     User updateUser(Long id, String name, UserStatus status, Long operatorId);
+
+    /**
+     * 获取用户统计数据
+     */
+    long countAll();
+
+    long countCreatedSince(java.time.LocalDateTime since);
 }

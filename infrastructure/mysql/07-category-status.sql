@@ -1,0 +1,4 @@
+SET NAMES utf8mb4;
+USE product_db;
+
+ALTER TABLE categories ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '分类状态: ACTIVE/INACTIVE' AFTER sort_order;

@@ -2,9 +2,13 @@
 # 容器化部署环境配置
 
 server:
-  port: 8081
+  port: ${SERVER_PORT:8001}
 
 spring:
+  # Flyway 禁用（Docker 环境使用 MySQL init scripts）
+  flyway:
+    enabled: false
+
   # Redis 配置
   data:
     redis:
@@ -14,9 +18,9 @@ spring:
 
   # 数据源配置
   datasource:
-    url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/${DB_NAME:awsome_shop_auth}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:root}
+    url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/${DB_NAME:auth_db}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USER:auth_user}
+    password: ${DB_PASSWORD:auth_pass_2026}
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
@@ -66,3 +70,10 @@ logging:
   level:
     root: INFO
     com.awsome: INFO
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

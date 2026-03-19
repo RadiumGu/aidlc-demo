@@ -26,6 +26,20 @@
     "register": "Register Now",
     "hint": "Test accounts: employee / emp123 (Employee) or admin / admin123 (Admin)"
   },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Register a new account to get started",
+    "usernamePlaceholder": "Enter username",
+    "passwordPlaceholder": "Enter password",
+    "namePlaceholder": "Enter your name",
+    "employeeIdPlaceholder": "Enter employee ID",
+    "registerBtn": "Register",
+    "registering": "Registering...",
+    "hasAccount": "Already have an account?",
+    "login": "Sign In",
+    "allRequired": "Please fill in all required fields",
+    "failed": "Registration failed"
+  },
   "employee": {
     "nav": {
       "home": "Home",
@@ -40,7 +54,8 @@
     "heroBrowse": "Browse Now",
     "sold": "Redeemed",
     "soldUnit": "",
-    "redeem": "Redeem"
+    "redeem": "Redeem",
+    "allCategories": "All"
   },
   "admin": {
     "title": "Admin",
@@ -53,7 +68,8 @@
       "categories": "Categories",
       "points": "Points",
       "orders": "Orders",
-      "users": "Users"
+      "users": "Users",
+      "pointsConfig": "Points Config"
     },
     "metrics": {
       "totalProducts": "Total Products",

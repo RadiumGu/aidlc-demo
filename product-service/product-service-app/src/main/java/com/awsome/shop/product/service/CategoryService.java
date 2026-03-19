@@ -79,6 +79,9 @@ public class CategoryService {
         if (request.getSortOrder() != null) {
             po.setSortOrder(request.getSortOrder());
         }
+        if (request.getStatus() != null) {
+            po.setStatus(request.getStatus());
+        }
 
         categoryMapper.updateById(po);
         return toResponse(po);
@@ -115,6 +118,12 @@ public class CategoryService {
                         .orderByAsc(CategoryPO::getSortOrder)
                         .orderByAsc(CategoryPO::getId));
 
+        // 统计每个分类下的商品数量
+        List<ProductPO> allProducts = productMapper.selectList(
+                new LambdaQueryWrapper<ProductPO>().select(ProductPO::getCategoryId));
+        Map<Long, Long> productCountMap = allProducts.stream()
+                .collect(Collectors.groupingBy(ProductPO::getCategoryId, Collectors.counting()));
+
         // 按 parentId 分组
         Map<Long, List<CategoryPO>> childrenMap = all.stream()
                 .filter(c -> c.getParentId() != null)
@@ -128,14 +137,21 @@ public class CategoryService {
                     node.setId(c.getId());
                     node.setName(c.getName());
                     node.setSortOrder(c.getSortOrder());
+                    node.setStatus(c.getStatus() != null ? c.getStatus() : "ACTIVE");
                     List<CategoryPO> children = childrenMap.getOrDefault(c.getId(), Collections.emptyList());
+                    // 父类目商品数 = 自身 + 所有子类目
+                    long parentCount = productCountMap.getOrDefault(c.getId(), 0L);
                     node.setChildren(children.stream().map(child -> {
                         CategoryTreeNode childNode = new CategoryTreeNode();
                         childNode.setId(child.getId());
                         childNode.setName(child.getName());
                         childNode.setSortOrder(child.getSortOrder());
+                        childNode.setStatus(child.getStatus() != null ? child.getStatus() : "ACTIVE");
+                        childNode.setProductCount(productCountMap.getOrDefault(child.getId(), 0L));
                         return childNode;
                     }).collect(Collectors.toList()));
+                    long childrenTotal = node.getChildren().stream().mapToLong(ch -> ch.getProductCount() != null ? ch.getProductCount() : 0).sum();
+                    node.setProductCount(parentCount + childrenTotal);
                     return node;
                 })
                 .collect(Collectors.toList());

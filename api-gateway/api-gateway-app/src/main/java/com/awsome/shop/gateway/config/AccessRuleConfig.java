@@ -34,7 +34,9 @@ public class AccessRuleConfig {
 
     private static final List<AccessRule> PUBLIC_RULES = List.of(
             new AccessRule("POST", "/api/auth/register"),
-            new AccessRule("POST", "/api/auth/login")
+            new AccessRule("POST", "/api/auth/login"),
+            new AccessRule("GET", "/api/files/*"),
+            new AccessRule("GET", "/actuator/health")
     );
 
     private static final List<AccessRule> ADMIN_ONLY_RULES = List.of(

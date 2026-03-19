@@ -17,6 +17,8 @@ public class CategoryPO {
 
     private Integer sortOrder;
 
+    private String status;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 

@@ -1,0 +1,17 @@
+com/awsome/shop/order/client/ProductServiceClient.class
+com/awsome/shop/order/controller/AdminOrderController.class
+com/awsome/shop/order/exception/GlobalExceptionHandler.class
+com/awsome/shop/order/repository/OrderMapper.class
+com/awsome/shop/order/client/PointsServiceClient.class
+com/awsome/shop/order/client/ProductServiceClient$RetryableAction.class
+com/awsome/shop/order/client/PointsServiceClient$RetryableAction.class
+com/awsome/shop/order/client/PointsServiceClient$2.class
+com/awsome/shop/order/client/PointsServiceClient$1.class
+com/awsome/shop/order/client/ProductServiceClient$1.class
+com/awsome/shop/order/config/RestTemplateConfig.class
+com/awsome/shop/order/service/OrderService.class
+com/awsome/shop/order/config/MybatisPlusConfig.class
+com/awsome/shop/order/model/OrderPO.class
+com/awsome/shop/order/config/MybatisPlusConfig$1.class
+com/awsome/shop/order/controller/OrderController.class
+com/awsome/shop/order/OrderServiceApplication.class

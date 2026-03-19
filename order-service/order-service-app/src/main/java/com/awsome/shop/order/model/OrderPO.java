@@ -18,6 +18,8 @@ public class OrderPO {
 
     private Long userId;
 
+    private String username;
+
     private Long productId;
 
     private String productName;
@@ -29,6 +31,12 @@ public class OrderPO {
     private Long pointsTransactionId;
 
     private OrderStatus status;
+
+    private String receiverName;
+
+    private String receiverPhone;
+
+    private String receiverAddress;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;

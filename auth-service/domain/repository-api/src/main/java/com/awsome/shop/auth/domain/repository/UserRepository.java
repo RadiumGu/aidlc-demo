@@ -41,4 +41,14 @@ public interface UserRepository {
      * @param keyword 搜索关键词（模糊匹配 username、name、employeeId）
      */
     PageResult<User> findPage(int page, int size, String keyword);
+
+    /**
+     * 统计用户总数
+     */
+    long countAll();
+
+    /**
+     * 统计指定时间之后创建的用户数
+     */
+    long countCreatedSince(java.time.LocalDateTime since);
 }

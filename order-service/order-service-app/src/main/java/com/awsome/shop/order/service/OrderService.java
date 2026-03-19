@@ -4,7 +4,9 @@ import com.awsome.shop.order.client.PointsServiceClient;
 import com.awsome.shop.order.client.ProductServiceClient;
 import com.awsome.shop.order.common.BusinessException;
 import com.awsome.shop.order.common.PageResult;
+import com.awsome.shop.order.dto.CreateOrderRequest;
 import com.awsome.shop.order.dto.OrderResponse;
+import com.awsome.shop.order.dto.StatsResponse;
 import com.awsome.shop.order.enums.OrderErrorCode;
 import com.awsome.shop.order.enums.OrderStatus;
 import com.awsome.shop.order.model.OrderPO;
@@ -40,7 +42,8 @@ public class OrderService {
      * 预校验 → 创建订单 → 扣积分 → 扣库存 → 补偿回滚
      */
     @Transactional
-    public OrderResponse createOrder(Long userId, Long productId) {
+    public OrderResponse createOrder(Long userId, CreateOrderRequest request) {
+        Long productId = request.getProductId();
         // === 阶段一：预校验（不加锁，快速拦截） ===
         Map<String, Object> product = productServiceClient.getProduct(productId);
         validateProduct(product);
@@ -61,6 +64,10 @@ public class OrderService {
         order.setProductImageUrl((String) product.get("imageUrl"));
         order.setPointsCost(pointsPrice);
         order.setStatus(OrderStatus.PENDING);
+        order.setUsername(request.getUsername());
+        order.setReceiverName(request.getReceiverName());
+        order.setReceiverPhone(request.getReceiverPhone());
+        order.setReceiverAddress(request.getReceiverAddress());
         orderMapper.insert(order);
         Long orderId = order.getId();
 
@@ -117,6 +124,17 @@ public class OrderService {
         }
         if (!order.getUserId().equals(userId)) {
             throw new BusinessException(OrderErrorCode.ORDER_ACCESS_DENIED);
+        }
+        return toResponse(order);
+    }
+
+    /**
+     * 管理员查看兑换详情（无归属校验）
+     */
+    public OrderResponse getOrderById(Long orderId) {
+        OrderPO order = orderMapper.selectById(orderId);
+        if (order == null) {
+            throw new BusinessException(OrderErrorCode.ORDER_NOT_FOUND);
         }
         return toResponse(order);
     }
@@ -190,6 +208,23 @@ public class OrderService {
 
     // ========== 私有方法 ==========
 
+    public java.util.Map<Long, Long> getUserOrderCounts() {
+        var list = orderMapper.selectList(null);
+        return list.stream().collect(java.util.stream.Collectors.groupingBy(OrderPO::getUserId, java.util.stream.Collectors.counting()));
+    }
+
+    public StatsResponse getStats() {
+        LocalDateTime monthStart = LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay();
+        LocalDateTime lastMonthStart = monthStart.minusMonths(1);
+        long monthOrders = orderMapper.selectCount(
+                new LambdaQueryWrapper<OrderPO>().ge(OrderPO::getCreatedAt, monthStart));
+        long lastMonthOrders = orderMapper.selectCount(
+                new LambdaQueryWrapper<OrderPO>()
+                        .ge(OrderPO::getCreatedAt, lastMonthStart)
+                        .lt(OrderPO::getCreatedAt, monthStart));
+        return StatsResponse.builder().monthOrders(monthOrders).lastMonthOrders(lastMonthOrders).build();
+    }
+
     private void validateProduct(Map<String, Object> product) {
         if (product == null || product.isEmpty()) {
             throw new BusinessException(OrderErrorCode.PRODUCT_NOT_FOUND);
@@ -218,11 +253,15 @@ public class OrderService {
         OrderResponse resp = new OrderResponse();
         resp.setId(po.getId());
         resp.setUserId(po.getUserId());
+        resp.setUsername(po.getUsername());
         resp.setProductId(po.getProductId());
         resp.setProductName(po.getProductName());
         resp.setProductImageUrl(po.getProductImageUrl());
         resp.setPointsCost(po.getPointsCost());
         resp.setStatus(po.getStatus().getValue());
+        resp.setReceiverName(po.getReceiverName());
+        resp.setReceiverPhone(po.getReceiverPhone());
+        resp.setReceiverAddress(po.getReceiverAddress());
         resp.setCreatedAt(po.getCreatedAt());
         resp.setUpdatedAt(po.getUpdatedAt());
         return resp;

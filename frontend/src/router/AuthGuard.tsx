@@ -14,7 +14,7 @@ export default function AuthGuard({ children, requiredRole }: AuthGuardProps) {
   }
 
   if (requiredRole && user?.role !== requiredRole) {
-    return <Navigate to={user?.role === 'admin' ? '/admin' : '/'} replace />;
+    return <Navigate to={user?.role === 'ADMIN' ? '/admin' : '/'} replace />;
   }
 
   return <>{children}</>;

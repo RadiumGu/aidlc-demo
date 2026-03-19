@@ -36,7 +36,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      navigate(user.role === 'admin' ? '/admin' : '/', { replace: true });
+      navigate(user.role === 'ADMIN' ? '/admin' : '/', { replace: true });
     }
   }, [isAuthenticated, user, navigate]);
   const [showPassword, setShowPassword] = useState(false);
@@ -46,11 +46,11 @@ export default function Login() {
 
   const handleLogin = async () => {
     setError(false);
-    const success = await login(username, password);
-    if (success) {
+    try {
+      await login(username, password);
       const user = useAuthStore.getState().user;
-      navigate(user?.role === 'admin' ? '/admin' : '/');
-    } else {
+      navigate(user?.role === 'ADMIN' ? '/admin' : '/');
+    } catch {
       setError(true);
     }
   };

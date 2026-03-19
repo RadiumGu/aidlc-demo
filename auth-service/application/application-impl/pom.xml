@@ -34,6 +34,12 @@
 
         <dependency>
             <groupId>com.awsome.shop</groupId>
+            <artifactId>security-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.awsome.shop</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>

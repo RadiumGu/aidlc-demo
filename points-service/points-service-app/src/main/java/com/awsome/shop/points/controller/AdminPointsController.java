@@ -58,4 +58,9 @@ public class AdminPointsController {
             @Valid @RequestBody UpdateDistributionConfigRequest request) {
         return Result.success(configService.updateDistributionConfig(request));
     }
+
+    @GetMapping("/stats")
+    public Result<StatsResponse> stats() {
+        return Result.success(pointsService.getStats());
+    }
 }

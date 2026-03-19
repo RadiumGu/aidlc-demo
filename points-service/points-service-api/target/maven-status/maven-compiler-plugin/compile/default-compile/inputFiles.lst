@@ -1,0 +1,16 @@
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/DistributionConfigResponse.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/enums/TransactionType.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/common/Result.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/DeductPointsRequest.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/UpdateDistributionConfigRequest.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/enums/PointsErrorCode.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/AdjustPointsRequest.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/InitPointsRequest.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/common/PageResult.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/RollbackDeductionRequest.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/PointBalanceResponse.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/PointTransactionResponse.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/common/BusinessException.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/UserPointResponse.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/common/ErrorCode.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/points-service/points-service-api/src/main/java/com/awsome/shop/points/dto/StatsResponse.java

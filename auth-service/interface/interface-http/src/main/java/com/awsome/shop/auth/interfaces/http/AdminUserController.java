@@ -2,6 +2,7 @@ package com.awsome.shop.auth.interfaces.http;
 
 import com.awsome.shop.auth.application.dto.UpdateUserRequest;
 import com.awsome.shop.auth.application.dto.UserResponse;
+import com.awsome.shop.auth.application.dto.StatsResponse;
 import com.awsome.shop.auth.application.service.AuthAppService;
 import com.awsome.shop.auth.common.dto.PageResult;
 import com.awsome.shop.auth.common.result.Result;
@@ -47,5 +48,10 @@ public class AdminUserController {
             @Valid @RequestBody UpdateUserRequest request,
             @RequestHeader("X-User-Id") Long operatorId) {
         return Result.success(authAppService.updateUser(id, request, operatorId));
+    }
+
+    @GetMapping("/stats")
+    public Result<StatsResponse> stats() {
+        return Result.success(authAppService.getStats());
     }
 }

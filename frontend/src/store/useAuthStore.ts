@@ -1,63 +1,62 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { authApi } from '../services/auth';
 
-export type UserRole = 'employee' | 'admin';
+export type UserRole = 'EMPLOYEE' | 'ADMIN';
 
 export interface UserInfo {
+  id: number;
   username: string;
-  displayName: string;
   role: UserRole;
-  points?: number;
-  avatar?: string;
 }
-
-// Mock users for frontend development, will be replaced by backend API
-const MOCK_USERS: Record<string, UserInfo & { password: string }> = {
-  admin: {
-    username: 'admin',
-    password: 'admin123',
-    displayName: '管理员',
-    role: 'admin',
-  },
-  employee: {
-    username: 'employee',
-    password: 'emp123',
-    displayName: '李明',
-    role: 'employee',
-    points: 2580,
-  },
-};
 
 interface AuthState {
   user: UserInfo | null;
+  token: string | null;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<void>;
+  register: (username: string, password: string, name: string, employeeId: string) => Promise<void>;
   logout: () => void;
+  setAuth: (token: string, user: UserInfo) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      token: null,
       isAuthenticated: false,
-      login: async (username: string, password: string) => {
-        // TODO: replace with real API call
-        const mockUser = MOCK_USERS[username];
-        if (mockUser && mockUser.password === password) {
-          const { password: _, ...userInfo } = mockUser;
-          set({ user: userInfo, isAuthenticated: true });
-          return true;
-        }
-        return false;
+
+      login: async (username, password) => {
+        const res = await authApi.login({ username, password });
+        const { token, userId, username: uname, role } = res.data;
+        localStorage.setItem('token', token);
+        set({
+          token,
+          user: { id: userId, username: uname, role: role as UserRole },
+          isAuthenticated: true,
+        });
       },
+
+      register: async (username, password, name, employeeId) => {
+        await authApi.register({ username, password, name, employeeId });
+      },
+
       logout: () => {
-        set({ user: null, isAuthenticated: false });
+        localStorage.removeItem('token');
+        set({ user: null, token: null, isAuthenticated: false });
+      },
+
+      setAuth: (token, user) => {
+        localStorage.setItem('token', token);
+        set({ token, user, isAuthenticated: true });
       },
     }),
     {
       name: 'auth-storage',
       partialize: (state) => ({
         user: state.user,
+        token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
     },

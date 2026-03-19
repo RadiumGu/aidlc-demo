@@ -1,0 +1,11 @@
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/config/MybatisPlusConfig.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/model/OrderPO.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/OrderServiceApplication.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/repository/OrderMapper.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/exception/GlobalExceptionHandler.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/controller/AdminOrderController.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/client/ProductServiceClient.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/service/OrderService.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/controller/OrderController.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/config/RestTemplateConfig.java
+/Users/luhaoy/Desktop/AIDLC-Workshop/aidlc-demo/order-service/order-service-app/src/main/java/com/awsome/shop/order/client/PointsServiceClient.java

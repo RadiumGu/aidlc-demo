@@ -43,4 +43,14 @@ public class AdminProductController {
             @RequestParam(required = false) String status) {
         return Result.success(productService.getAdminProductList(page, size, categoryId, keyword, status));
     }
+
+    @GetMapping("/{id}")
+    public Result<ProductResponse> detail(@PathVariable Long id) {
+        return Result.success(productService.getProductById(id));
+    }
+
+    @GetMapping("/stats")
+    public Result<StatsResponse> stats() {
+        return Result.success(productService.getStats());
+    }
 }

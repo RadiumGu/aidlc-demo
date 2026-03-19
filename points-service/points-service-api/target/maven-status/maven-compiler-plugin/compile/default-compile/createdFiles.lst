@@ -1,0 +1,17 @@
+com/awsome/shop/points/dto/PointTransactionResponse.class
+com/awsome/shop/points/dto/PointBalanceResponse.class
+com/awsome/shop/points/enums/PointsErrorCode.class
+com/awsome/shop/points/common/PageResult.class
+com/awsome/shop/points/dto/UpdateDistributionConfigRequest.class
+com/awsome/shop/points/dto/StatsResponse.class
+com/awsome/shop/points/dto/DeductPointsRequest.class
+com/awsome/shop/points/common/ErrorCode.class
+com/awsome/shop/points/common/BusinessException.class
+com/awsome/shop/points/dto/DistributionConfigResponse.class
+com/awsome/shop/points/enums/TransactionType.class
+com/awsome/shop/points/dto/StatsResponse$StatsResponseBuilder.class
+com/awsome/shop/points/dto/UserPointResponse.class
+com/awsome/shop/points/common/Result.class
+com/awsome/shop/points/dto/RollbackDeductionRequest.class
+com/awsome/shop/points/dto/AdjustPointsRequest.class
+com/awsome/shop/points/dto/InitPointsRequest.class
