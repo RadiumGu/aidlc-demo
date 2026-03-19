@@ -23,8 +23,7 @@
     "loginBtn": "登 录",
     "loginFailed": "用户名或密码错误",
     "noAccount": "还没有账户？",
-    "register": "立即注册",
-    "hint": "测试账号：employee / emp123（员工）或 admin / admin123（管理员）"
+    "register": "立即注册"
   },
   "register": {
     "title": "创建账户",

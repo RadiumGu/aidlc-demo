@@ -23,8 +23,7 @@
     "loginBtn": "Sign In",
     "loginFailed": "Invalid username or password",
     "noAccount": "Don't have an account?",
-    "register": "Register Now",
-    "hint": "Test accounts: employee / emp123 (Employee) or admin / admin123 (Admin)"
+    "register": "Register Now"
   },
   "register": {
     "title": "Create Account",
