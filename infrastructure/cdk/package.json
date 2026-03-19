@@ -1,0 +1,24 @@
+{
+  "name": "awsomeshop-cdk",
+  "version": "1.0.0",
+  "bin": {
+    "cdk": "dist/bin/app.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "cdk": "cdk",
+    "synth": "npm run build && cdk synth",
+    "deploy": "npm run build && cdk deploy --all",
+    "destroy": "cdk destroy --all"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.170.0",
+    "constructs": "^10.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "~5.6.0",
+    "aws-cdk": "^2.170.0",
+    "tsx": "^4.19.0"
+  }
+}

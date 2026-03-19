@@ -1,0 +1,186 @@
+# docker-compose for EC2 deployment (pulls from ECR)
+# Usage: ECR_REGISTRY=xxx.dkr.ecr.region.amazonaws.com docker compose -f docker-compose.ecr.yml up -d
+name: awsomeshop
+
+services:
+
+  mysql:
+    image: mysql:8.4
+    container_name: awsomeshop-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - awsomeshop-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: awsomeshop-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - awsomeshop-net
+
+  auth-service:
+    image: ${ECR_REGISTRY}/awsomeshop/auth-service:${TAG:-latest}
+    container_name: awsomeshop-auth
+    depends_on:
+      mysql: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${AUTH_DB_NAME}
+      DB_USER: ${AUTH_DB_USER}
+      DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      SERVER_PORT: 8001
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8001/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - awsomeshop-net
+
+  product-service:
+    image: ${ECR_REGISTRY}/awsomeshop/product-service:${TAG:-latest}
+    container_name: awsomeshop-product
+    depends_on:
+      mysql: { condition: service_healthy }
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${PRODUCT_DB_NAME}
+      DB_USER: ${PRODUCT_DB_USER}
+      DB_PASSWORD: ${PRODUCT_DB_PASSWORD}
+      UPLOAD_DIR: ${UPLOAD_DIR:-/app/uploads}
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE:-5MB}
+      SERVER_PORT: 8002
+    volumes:
+      - uploads:/app/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8002/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - awsomeshop-net
+
+  points-service:
+    image: ${ECR_REGISTRY}/awsomeshop/points-service:${TAG:-latest}
+    container_name: awsomeshop-points
+    depends_on:
+      mysql: { condition: service_healthy }
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${POINTS_DB_NAME}
+      DB_USER: ${POINTS_DB_USER}
+      DB_PASSWORD: ${POINTS_DB_PASSWORD}
+      SERVER_PORT: 8003
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8003/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - awsomeshop-net
+
+  order-service:
+    image: ${ECR_REGISTRY}/awsomeshop/order-service:${TAG:-latest}
+    container_name: awsomeshop-order
+    depends_on:
+      mysql: { condition: service_healthy }
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${ORDER_DB_NAME}
+      DB_USER: ${ORDER_DB_USER}
+      DB_PASSWORD: ${ORDER_DB_PASSWORD}
+      SERVER_PORT: 8004
+      PRODUCT_SERVICE_URL: http://product-service:8002
+      POINTS_SERVICE_URL: http://points-service:8003
+      CONNECT_TIMEOUT: 1000
+      READ_TIMEOUT: 2000
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8004/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - awsomeshop-net
+
+  api-gateway:
+    image: ${ECR_REGISTRY}/awsomeshop/api-gateway:${TAG:-latest}
+    container_name: awsomeshop-gateway
+    depends_on:
+      - auth-service
+      - product-service
+      - points-service
+      - order-service
+    environment:
+      SERVER_PORT: 8080
+      JWT_SECRET: ${JWT_SECRET}
+      AUTH_SERVICE_URL: http://auth-service:8001
+      PRODUCT_SERVICE_URL: http://product-service:8002
+      POINTS_SERVICE_URL: http://points-service:8003
+      ORDER_SERVICE_URL: http://order-service:8004
+      CONNECT_TIMEOUT: 1000
+      READ_TIMEOUT: 2000
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - awsomeshop-net
+
+  frontend:
+    image: ${ECR_REGISTRY}/awsomeshop/frontend:${TAG:-latest}
+    container_name: awsomeshop-frontend
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      - api-gateway
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - awsomeshop-net
+
+volumes:
+  mysql-data:
+  uploads:
+
+networks:
+  awsomeshop-net:
+    driver: bridge
